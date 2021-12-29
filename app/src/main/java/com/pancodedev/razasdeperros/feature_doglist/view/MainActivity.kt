@@ -16,10 +16,14 @@ class MainActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
 
-        viewModel.getBreedList().observe(this, { list ->
+        viewModel.getDogList().observe(this, { list ->
             list.forEach {
-                Log.d(tag, "${it.first} - ${it.second}")
+                Log.d(tag, "${it.breed.first} - ${it.breed.second} - ${it.imageLink}")
             }
+        })
+
+        viewModel.getBreedList().observe(this, {
+            viewModel.fetchDogImagesFromServer(it)
         })
 
         viewModel.fetchBreedListFromServer()
