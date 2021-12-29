@@ -43,7 +43,7 @@ class DogRepository {
     }
 
     suspend fun fetchDogImagesFromServer(breedList: List<Pair<String, String?>>) {
-        var dogList = mutableListOf<Dog>()
+        val dogList = mutableListOf<Dog>()
 
         breedList.forEach {
             var breed = it.first
@@ -51,7 +51,6 @@ class DogRepository {
             if(!it.second.isNullOrEmpty()) breed += "/${it.second}"
 
             val response: Response<DogImageResponse> = try {
-                Log.d("repo", breed)
                 RetrofitInstance.api.getRandomImage(breed)
             } catch (e: IOException) {
                 Log.e(tag, "IOException, you might not have internet connection")
@@ -60,7 +59,6 @@ class DogRepository {
                 Log.e(tag, "HttpException, unexpected response")
                 return
             }
-            Log.d("repo", response.raw().request.url.toString())
 
             if (response.isSuccessful && response.body() != null) {
                 dogList.add(Dog(it, response.body()!!.imageLink!!))
